@@ -33,9 +33,13 @@
             $sql = "UPDATE `users` SET `amount` = $newAmount WHERE `username` = '$user' ";
 
             $query = mysqli_query($connected, $sql) or die(mysqli_error($connected));
-            
+            $time = date('Y-m-d H:i:s',strtotime('now'));
             if ( $query ) {
+                //add detail to wallet history
+                $insertion = "INSERT INTO `wallet_history` (username, amount, description, balance)
+                    VALUES ('$user', $amount, '₦$amount credited by ADMIN', $newAmount)";
                 
+                $queryIns = mysqli_query($connected, $insertion) or die(mysqli_error($connected));
                 echo "<script> alert('₦$amount has been added to $user\'s wallet '); window.location.replace('credit_user.php');</script>";
             } else {
                 echo "<script> alert('$user wallet cannot be funded at the moment!!!'); window.location.replace('credit_user.php'); </script>";
@@ -53,14 +57,18 @@
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <link rel="stylesheet" href="css/credit.css">
+<title> Credit User</title>
 
 
 <div class="container">
 	<div class="row">
         <h2>Credit User!</h2>
-        <div class="col-md-6">
+        <div class="col-md-3">
         <a href="debit_user.php"> Debit Users Here </a>
     </div>
+    <div class="col-md-6">
+            <a href="wallet_history.php"> Check Wallet history Here </a>
+        </div>
 </div>
 
     <form method="POST" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" >

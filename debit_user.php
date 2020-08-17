@@ -38,7 +38,11 @@
             $query = mysqli_query($connected, $sql) or die(mysqli_error($connected));
             
             if ( $query ) {
-                
+                //add detail to wallet history
+                $insertion = "INSERT INTO `wallet_history` (username, amount, description, balance)
+                VALUES ('$user', $amount, '₦$amount debitted by ADMIN', $newAmount)";
+                            
+                $queryIns = mysqli_query($connected, $insertion) or die(mysqli_error($connected));
                 echo "<script> alert('₦$amount has been removed to $user\'s wallet '); window.location.replace('debit_user.php');</script>";
             } else {
                 echo "<script> alert('$user wallet cannot be debitted at the moment!!!'); window.location.replace('debit_user.php'); </script>";
@@ -56,13 +60,17 @@
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <link rel="stylesheet" href="css/credit.css">
+<title> Debit User </title>
 
 
 <div class="container">
 	<div class="row">
         <h2>Debit User!</h2>
-        <div class="col-md-6">
+        <div class="col-md-3">
             <a href="credit_user.php"> Credit Users Here </a>
+        </div>
+        <div class="col-md-6">
+            <a href="wallet_history.php"> Check Wallet history Here </a>
         </div>
     </div>
     <form method="POST" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" >
